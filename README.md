@@ -73,6 +73,10 @@
 
 如果您在使用过程中遇到任何问题或有反馈意见，欢迎通过  [GitHub Issues](https://github.com/nicejade/wealth-tracker/issues) 与我们联系。您的宝贵意见将帮助我们不断改进这一工具，以更好地满足用户的需求。
 
+## 架构说明
+
+如需了解项目的整体架构、技术栈、部署形态与核心数据流，请参阅 [docs/architecture.md](./docs/architecture.md)。
+
 ## 如何使用？
 
 ### 桌面应用（Electron）
