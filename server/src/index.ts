@@ -77,6 +77,8 @@ const connectToSqlite = async () => {
     await sequelize.sync()
     await addColumnIfNotExists('assets', 'tags', "TEXT DEFAULT ''")
     await addColumnIfNotExists('record', 'tags', "TEXT DEFAULT ''")
+    await addColumnIfNotExists('assets', 'cashEquivalent', 'DECIMAL(10,2) DEFAULT 0')
+    await addColumnIfNotExists('record', 'cashEquivalent', 'DECIMAL(10,2) DEFAULT 0')
     await migrateKindToSignBasedAmounts()
     console.log('🎊 Database synced!')
   } catch (err) {

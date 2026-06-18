@@ -400,6 +400,75 @@ export const genTreemapOptions = (theme = 'light') => {
   }
 }
 
+export const genCashPieOptions = (theme = 'light') => {
+  let labelColor = '#6B7280'
+
+  if (theme === 'dark') {
+    labelColor = '#9CA3AF'
+  }
+
+  return {
+    series: [],
+    labels: [],
+    chart: {
+      type: 'pie',
+      height: 400,
+      fontFamily: 'Inter, sans-serif',
+      toolbar: {
+        show: false,
+      },
+    },
+    colors: ['#2edfa3', '#E5E7EB'],
+    legend: {
+      position: 'bottom',
+      fontSize: '14px',
+      fontFamily: 'Inter, sans-serif',
+      labels: {
+        colors: [labelColor],
+      },
+    },
+    tooltip: {
+      shared: true,
+      followCursor: false,
+      fillSeriesColor: false,
+      style: {
+        fontSize: '14px',
+        fontFamily: 'Inter, sans-serif',
+      },
+      y: {
+        formatter: function (value) {
+          return value + '%'
+        },
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function (value) {
+        return value.toFixed(2) + '%'
+      },
+      style: {
+        fontSize: '14px',
+        fontFamily: 'Inter, sans-serif',
+        fontWeight: 600,
+        colors: ['#374151'],
+      },
+      dropShadow: {
+        enabled: false,
+      },
+    },
+    responsive: [
+      {
+        breakpoint: 430,
+        options: {
+          chart: {
+            height: 300,
+          },
+        },
+      },
+    ],
+  }
+}
+
 export const genBindingOptions = (offsetDays: number) => {
   return {
     chart: {

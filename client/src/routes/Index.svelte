@@ -13,6 +13,7 @@
   import AreaChart from '../components/ChartWidget/AreaChart.svelte'
   import DonutChart from '../components/ChartWidget/DonutChart.svelte'
   import BindingChart from '../components/ChartWidget/BindingChart.svelte'
+  import CashPieChart from '../components/ChartWidget/CashPieChart.svelte'
   import UpdateModal from '../components/Modal/Update.svelte'
   import SvgIcon from '../components/SvgIcon.svelte'
   import { getAssets, destroyAssets, getRecords, resetDatabase } from '../helper/apis'
@@ -31,6 +32,8 @@
   let rawRecordsArr = []
   let convertedAssetsArr = []
   let convertedRecordsArr = []
+  let cashEquivalentTotal = 0
+  let otherAssetsTotal = 0
   let currentAssetItem: AssetsItem
   let updateActionType: string = ''
   let isShowUpdateModal: boolean = false
@@ -44,6 +47,12 @@
     convertedAssetsArr = rawAssetsArr.map((item) => ({
       ...item,
       amount: convertCurrency(item.amount, item.currency, $targetCurrencyCode, $exchangeRates),
+      cashEquivalent: convertCurrency(
+        item.cashEquivalent ?? 0,
+        item.currency,
+        $targetCurrencyCode,
+        $exchangeRates,
+      ),
     }))
     convertedRecordsArr = rawRecordsArr.map((item) => ({
       ...item,
@@ -53,6 +62,23 @@
 
   // 资产配置图仅统计正数金额账户
   $: donutSources = convertedAssetsArr.filter((item) => Number(item.amount) >= 0)
+
+  // 计算现金及等价物总额与其他资产总额（用于扇形图）
+  $: {
+    let cashTotal = 0
+    let assetsTotal = 0
+    convertedAssetsArr.forEach((item) => {
+      const amount = Number(item.amount)
+      if (amount <= 0) return
+      assetsTotal += amount
+      const cashEquivalent = Number(item.cashEquivalent ?? 0)
+      if (cashEquivalent > 0) {
+        cashTotal += Math.min(cashEquivalent, amount)
+      }
+    })
+    cashEquivalentTotal = Number(cashTotal.toFixed(2))
+    otherAssetsTotal = Number(Math.max(0, assetsTotal - cashTotal).toFixed(2))
+  }
 
   onMount(async () => {
     updatePageMetaInfo({})
@@ -204,6 +230,9 @@
     {#if donutSources.length}
       <DonutChart sources={donutSources}></DonutChart>
     {/if}
+    {#if cashEquivalentTotal > 0 || otherAssetsTotal > 0}
+      <CashPieChart {cashEquivalentTotal} {otherAssetsTotal}></CashPieChart>
+    {/if}
     <AreaChart sources={convertedRecordsArr}></AreaChart>
     <BindingChart sources={convertedRecordsArr}></BindingChart>
   {/if}
@@ -222,7 +251,7 @@
     <div class="my-4">
       <SvgIcon name="warning" width={36} height={36} color="#ff4582" />
     </div>
-    <h3 class="text-warn mb-5 text-lg font-normal">
+    <h3 class="mb-5 text-lg font-normal text-warn">
       {$_('destroyAccountConfirmation')}
     </h3>
     <div class="flex justify-center space-x-6">
@@ -241,7 +270,7 @@
     <div class="my-4">
       <SvgIcon name="warning" width={36} height={36} color="#ff4582" />
     </div>
-    <h3 class="text-warn mb-5 text-lg font-normal">
+    <h3 class="mb-5 text-lg font-normal text-warn">
       {$_('resetDatabaseConfirmation')}
     </h3>
     <div class="flex justify-center space-x-6">
@@ -263,7 +292,7 @@
     </h2>
     <a
       href="/advice"
-      class="regular-btn hover:text-brand inline-block text-center text-base"
+      class="regular-btn inline-block text-center text-base hover:text-brand"
       on:click={() => trackEvent('get-ai-advice-click')}>
       {$_('getAIAdvice')}
     </a>

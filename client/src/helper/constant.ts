@@ -50,6 +50,7 @@ export const DEFAULT_ACCOUNT_ITEM = {
   risk: RISK_TYPES[0],
   liquidity: LIQUIDITY_TYPES[0],
   amount: 0,
+  cashEquivalent: 0,
   datetime: dayjs().format('YYYY-MM-DD'),
   note: '',
 }

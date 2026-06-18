@@ -41,6 +41,7 @@ export const update = async (request, reply) => {
       type: params.type,
       alias: params.alias,
       amount: params.amount,
+      cashEquivalent: params.cashEquivalent ?? 0,
       currency: params.currency,
       note: params.note,
       datetime: params.datetime,

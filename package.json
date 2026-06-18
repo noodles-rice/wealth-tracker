@@ -31,7 +31,7 @@
     "restart": "pm2 restart wealth-tracker",
     "logs": "pm2 logs wealth-tracker",
     "docker": "yarn build && docker build -t wealth-tracker .",
-    "prettier": "prettier --write \"{client,server}/**/**/*.{svelte,js,ts,jsx,tsx,css,scss}\""
+    "prettier": "prettier --write \"server/**/*.{js,ts}\" && cd client && prettier --write \"src/**/*.{svelte,js,ts,jsx,tsx,css,scss,vue}\""
   },
   "husky": {
     "hooks": {

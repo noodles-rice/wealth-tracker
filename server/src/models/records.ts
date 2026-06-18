@@ -42,6 +42,11 @@ Record.init(
       allowNull: true,
       defaultValue: '',
     },
+    cashEquivalent: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      defaultValue: 0,
+    },
     currency: {
       type: DataTypes.TEXT,
       allowNull: false,

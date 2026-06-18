@@ -6,6 +6,7 @@
   import { Modal } from 'flowbite'
   import InputTag from '../InputTag.svelte'
   import SvgIcon from '../SvgIcon.svelte'
+  import Tooltips from '../Tooltips.svelte'
   import CustomSelect from './../Select.svelte'
   import { createAssets, updateAssets, updateRecords } from './../../helper/apis'
   import {
@@ -114,6 +115,22 @@
     datetimeError = ''
   }
 
+  const validateCashEquivalent = (amount: number, cashEquivalent: number): string => {
+    const normalizedAmount = Number(amount)
+    const normalizedCashEquivalent = Number(cashEquivalent ?? 0)
+
+    if (Number.isNaN(normalizedCashEquivalent) || normalizedCashEquivalent < 0) {
+      return $_('cashEquivalentErrorNegative')
+    }
+
+    const upperBound = Math.max(0, normalizedAmount)
+    if (normalizedCashEquivalent > upperBound) {
+      return $_('cashEquivalentErrorExceed')
+    }
+
+    return ''
+  }
+
   const genRiskActive = (risk) => {
     return ASSETS_RISK_ARR.findIndex((item) => item.value === risk)
   }
@@ -179,6 +196,11 @@
       alert.set(datetimeError)
       return
     }
+    const cashEquivalentError = validateCashEquivalent(items.amount, items.cashEquivalent)
+    if (cashEquivalentError) {
+      alert.set(cashEquivalentError)
+      return
+    }
     sendUpdateRequest()
   }
 
@@ -198,7 +220,7 @@
 <div
   id="update-modal"
   tabindex="-1"
-  class="z-9999 fixed left-0 right-0 top-0 hidden h-[calc(100%-1rem)] w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0 md:h-full">
+  class="fixed left-0 right-0 top-0 z-9999 hidden h-[calc(100%-1rem)] w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0 md:h-full">
   <div class="relative h-full w-full max-w-lg md:h-auto md:max-w-md">
     <!-- Modal content -->
     <div class="relative mt-16 rounded-lg bg-white pb-8 shadow">
@@ -286,7 +308,7 @@
         <div class="inline-flex w-full items-center justify-center pb-4">
           <hr class="my-6 h-px w-full border-0 bg-gray-200" />
           <span
-            class="text-grey absolute left-1/2 -translate-x-1/2 bg-white px-3 text-center font-medium leading-5">
+            class="absolute left-1/2 -translate-x-1/2 bg-white px-3 text-center font-medium leading-5 text-grey">
             {$_('lowFrequencyTip')}
           </span>
         </div>
@@ -305,6 +327,23 @@
             required />
         </div>
         <div class="module-warp">
+          <label for="update-cash-equivalent" class="custom-label flex items-center gap-1">
+            {$_('cashEquivalent')}
+            <Tooltips placement="top" theme="default">
+              <SvgIcon name="info" width={14} height={14} color="#9CA3AF" />
+              <span slot="tooltip">{$_('cashEquivalentTip')}</span>
+            </Tooltips>
+          </label>
+          <input
+            type="number"
+            step="0.01"
+            id="update-cash-equivalent"
+            bind:value={items.cashEquivalent}
+            class="custom-input"
+            placeholder={$_('placeholderOfCashEquivalent')}
+            required />
+        </div>
+        <div class="module-warp">
           <label for="update-datetime" class="custom-label">
             {$_('datetime')}
           </label>
@@ -318,7 +357,7 @@
               on:input={() => validateDatetimeInput(items)}
               required />
             {#if datetimeError}
-              <p class="text-mark text-sm">{datetimeError}</p>
+              <p class="text-sm text-mark">{datetimeError}</p>
             {/if}
           </div>
         </div>

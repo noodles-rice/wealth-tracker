@@ -1,13 +1,29 @@
 import { Assets } from './../models/assets'
 import { Record } from './../models/records'
 
+const validateCashEquivalent = (amount: number, cashEquivalent: number) => {
+  const normalizedAmount = Number(amount)
+  const normalizedCashEquivalent = Number(cashEquivalent ?? 0)
+
+  if (Number.isNaN(normalizedCashEquivalent) || normalizedCashEquivalent < 0) {
+    throw new Error('cashEquivalent must be greater than or equal to 0')
+  }
+
+  const upperBound = Math.max(0, normalizedAmount)
+  if (normalizedCashEquivalent > upperBound) {
+    throw new Error('cashEquivalent cannot exceed the asset amount')
+  }
+}
+
 export const create = async (request, reply) => {
   const params = request?.body
   try {
+    validateCashEquivalent(params.amount, params.cashEquivalent)
     const options = {
       type: params.type,
       alias: params.alias || params.type,
       amount: params.amount,
+      cashEquivalent: params.cashEquivalent ?? 0,
       currency: params.currency,
       note: params.note,
       datetime: params.datetime,
@@ -43,10 +59,12 @@ export const update = async (request, reply) => {
   const params = request?.body
   const now = new Date()
   try {
+    validateCashEquivalent(params.amount, params.cashEquivalent)
     const options = {
       type: params.type,
       alias: params.alias,
       amount: params.amount,
+      cashEquivalent: params.cashEquivalent ?? 0,
       currency: params.currency,
       note: params.note,
       datetime: params.datetime,

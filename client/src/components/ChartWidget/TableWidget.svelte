@@ -50,9 +50,8 @@
     return 3
   }
 
-  const baseSortOptions = { numeric: true, sensitivity: 'base' }
-  const defaultCollator = new Intl.Collator('en', baseSortOptions)
-  const pinyinCollator = new Intl.Collator('zh-u-co-pinyin', baseSortOptions)
+  const defaultCollator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
+  const pinyinCollator = new Intl.Collator('zh-u-co-pinyin', { numeric: true, sensitivity: 'base' })
   const compareByTypeLabel = (left, right) => {
     const leftLabel = getTypeLabel(left)
     const rightLabel = getTypeLabel(right)
@@ -151,7 +150,7 @@
 
 <Card
   size="xl"
-  class="hide-scrollbar w-full  max-w-none overflow-x-scroll shadow-none md:p-4 2xl:col-span-2">
+  class="2xl:col-span-2 w-full  max-w-none overflow-x-scroll shadow-none hide-scrollbar md:p-4">
   <div class="mb-4 flex flex-row gap-3 sm:flex-row sm:items-start sm:justify-between">
     <Caption title={$_('recordAssets')}></Caption>
     <a href="/detail" class="regular-btn focus-visible-ring !min-w-fit">{$_('viewDetails')}</a>
@@ -161,7 +160,7 @@
       <TableHeadCell>
         <button
           type="button"
-          class="hover:text-brand inline-flex items-center gap-2 focus:outline-none"
+          class="inline-flex items-center gap-2 hover:text-brand focus:outline-none"
           on:click={onTypeSortToggle}>
           <span>{$_('type')}</span>
           {#if typeSortOrder === 'asc'}
@@ -183,14 +182,14 @@
             {item.alias || item.type}
             {#if isLiability(item)}
               <span
-                class="text-mark border-mark ms-1 inline-flex items-center rounded-sm border bg-pink-50 px-1 py-0.5 text-xs font-medium">
+                class="ms-1 inline-flex items-center rounded-sm border border-mark bg-pink-50 px-1 py-0.5 text-xs font-medium text-mark">
                 {$_('liability')}
               </span>
             {/if}
           </TableBodyCell>
           <TableBodyCell>
             <span
-              class="text-brand border-brand me-1 inline-flex items-center rounded-sm border bg-yellow-50 px-1 py-0.5 text-xs font-medium">
+              class="me-1 inline-flex items-center rounded-sm border border-brand bg-yellow-50 px-1 py-0.5 text-xs font-medium text-brand">
               {getCurrencySymbol(item.currency, $customCurrencies)}
             </span>
             <span class:text-mark={isLiability(item)}>{item.amount}</span>
@@ -204,7 +203,7 @@
               on:click={() => {
                 onUpdateClick(item)
               }}>
-              <span class="hover:text-brand text-mark">{$_('update')}</span>
+              <span class="text-mark hover:text-brand">{$_('update')}</span>
             </Button>
           </TableBodyCell>
           <TableBodyCell>
@@ -215,7 +214,7 @@
               on:click={() => {
                 onDestroyClick(item)
               }}>
-              <span class="hover:text-brand text-mark">{$_('destroy')}</span>
+              <span class="text-mark hover:text-brand">{$_('destroy')}</span>
             </Button>
           </TableBodyCell>
         </TableBodyRow>
@@ -225,22 +224,22 @@
           <strong>{$_('netWorth')}</strong>
         </TableBodyCell>
         <TableBodyCell>
-          <strong class="text-brand font-bold">
+          <strong class="font-bold text-brand">
             <span
-              class="text-brand border-brand me-1 inline-flex items-center rounded-sm border bg-yellow-50 px-1 py-0.5 text-xs font-medium">
+              class="me-1 inline-flex items-center rounded-sm border border-brand bg-yellow-50 px-1 py-0.5 text-xs font-medium text-brand">
               {getCurrencySymbol($targetCurrencyCode, $customCurrencies)}
             </span>
             {$netWorthValue}
           </strong>
         </TableBodyCell>
         <TableBodyCell>
-          <strong class="text-brand font-bold">
+          <strong class="font-bold text-brand">
             {$targetCurrencyName}
           </strong>
         </TableBodyCell>
         <TableBodyCell>
           <Button size="sm" outline class="border-none focus:ring-0" on:click={onPersistClick}>
-            <span class="text-mark hover:text-brand font-bold">{$_('persist')}</span>
+            <span class="font-bold text-mark hover:text-brand">{$_('persist')}</span>
           </Button>
         </TableBodyCell>
         <TableBodyCell>
@@ -250,7 +249,7 @@
             disabled={!$isResettable}
             class="border-none focus:ring-0"
             on:click={onResetClick}>
-            <span class="text-mark hover:text-brand font-bold">{$_('reset')}</span>
+            <span class="font-bold text-mark hover:text-brand">{$_('reset')}</span>
           </Button>
         </TableBodyCell>
       </TableBodyRow>

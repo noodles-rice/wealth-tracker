@@ -15,6 +15,7 @@ export interface AssetsItem {
   type: string
   alias: string
   amount: number
+  cashEquivalent?: number
   currency: string
   risk: string
   liquidity: string
