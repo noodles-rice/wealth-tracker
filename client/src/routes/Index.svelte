@@ -17,7 +17,7 @@
   import UpdateModal from '../components/Modal/Update.svelte'
   import SvgIcon from '../components/SvgIcon.svelte'
   import { getAssets, destroyAssets, getRecords, resetDatabase } from '../helper/apis'
-  import { ACTION_TYPES, DEFAULT_ACCOUNT_ITEM } from './../helper/constant'
+  import { ACTION_TYPES, DEFAULT_ACCOUNT_ITEM, getCurrencySymbol } from './../helper/constant'
   import type { AssetsItem, RecordsItem } from '../typings'
   import { trackEvent } from '../helper/analytics'
   import {
@@ -26,7 +26,7 @@
     fetchExchangeRates,
     updatePageMetaInfo,
   } from '../helper/utils'
-  import { alert, exchangeRates, targetCurrencyCode } from '../stores'
+  import { alert, exchangeRates, targetCurrencyCode, customCurrencies } from '../stores'
 
   let rawAssetsArr = []
   let rawRecordsArr = []
@@ -34,6 +34,7 @@
   let convertedRecordsArr = []
   let cashEquivalentTotal = 0
   let otherAssetsTotal = 0
+  $: currencySymbol = getCurrencySymbol($targetCurrencyCode, $customCurrencies)
   let currentAssetItem: AssetsItem
   let updateActionType: string = ''
   let isShowUpdateModal: boolean = false
@@ -231,7 +232,7 @@
       <DonutChart sources={donutSources}></DonutChart>
     {/if}
     {#if cashEquivalentTotal > 0 || otherAssetsTotal > 0}
-      <CashPieChart {cashEquivalentTotal} {otherAssetsTotal}></CashPieChart>
+      <CashPieChart {cashEquivalentTotal} {otherAssetsTotal} {currencySymbol}></CashPieChart>
     {/if}
     <AreaChart sources={convertedRecordsArr}></AreaChart>
     <BindingChart sources={convertedRecordsArr}></BindingChart>

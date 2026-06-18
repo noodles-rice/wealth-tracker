@@ -7,8 +7,12 @@
 
   export let cashEquivalentTotal = 0
   export let otherAssetsTotal = 0
+  export let currencySymbol = ''
 
   const options: ApexOptions | any = genCashPieOptions('light')
+
+  $: roundedCashEquivalent = Math.round(cashEquivalentTotal)
+  $: roundedOtherAssets = Math.round(otherAssetsTotal)
 
   $: {
     const total = cashEquivalentTotal + otherAssetsTotal
@@ -21,6 +25,10 @@
       options.series = [0, 0]
     }
     options.labels = [$_('cashEquivalent'), $_('otherAssets')]
+    options.tooltip.y.formatter = function (value, { seriesIndex }) {
+      const amount = seriesIndex === 0 ? roundedCashEquivalent : roundedOtherAssets
+      return `${value}% (${currencySymbol}${amount})`
+    }
   }
 </script>
 
@@ -35,12 +43,16 @@
     <div class="flex items-center space-x-2">
       <div class="h-3 w-3 rounded-full bg-[#2edfa3]"></div>
       <span class="text-sm font-medium text-gray-700">{$_('cashEquivalent')}</span>
-      <span class="text-sm font-bold text-blue">{options.series[0]}%</span>
+      <span class="text-sm font-bold text-blue">
+        {options.series[0]}% ({currencySymbol}{roundedCashEquivalent})
+      </span>
     </div>
     <div class="flex items-center space-x-2">
       <div class="h-3 w-3 rounded-full bg-[#E5E7EB]"></div>
       <span class="text-sm font-medium text-gray-700">{$_('otherAssets')}</span>
-      <span class="text-sm font-bold text-blue">{options.series[1]}%</span>
+      <span class="text-sm font-bold text-blue">
+        {options.series[1]}% ({currencySymbol}{roundedOtherAssets})
+      </span>
     </div>
   </div>
 </Card>
