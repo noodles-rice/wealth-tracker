@@ -31,8 +31,7 @@
     activeTab = tab
   }
 
-  const dataActionBtnClass =
-    'regular-btn focus-visible-ring h-10 !min-w-fit !px-4 !py-0 !text-sm'
+  const dataActionBtnClass = 'regular-btn focus-visible-ring h-10 !min-w-fit !px-4 !py-0 !text-sm'
 
   const downloadFile = (content: string, filename: string, mime: string) => {
     const blob = new Blob([content], { type: mime })
@@ -172,7 +171,7 @@
     const $targetEl = document.getElementById(MODAL_KEY)
     const options: ModalOptions = {
       placement: 'top-center',
-      backdropClasses: 'fixed inset-0 z-40',
+      backdropClasses: 'fixed inset-0 z-[1000]',
       backdrop: 'static',
       closable: true,
       onHide: () => {
@@ -254,8 +253,8 @@
 <div
   id={MODAL_KEY}
   tabindex="-1"
-  class="fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0 md:h-full">
-  <div class="relative h-full w-full max-w-2xl md:h-auto md:max-w-3xl">
+  class="z-9999 fixed left-0 right-0 top-0 hidden h-[calc(100%-1rem)] w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0 md:h-full">
+  <div class="relative mx-auto w-full max-w-2xl md:max-w-3xl">
     <!-- Modal content -->
     <div class="relative mt-8 rounded-lg bg-white pb-4 shadow">
       <!-- Modal header -->

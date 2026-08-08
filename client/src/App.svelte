@@ -55,9 +55,9 @@
 
 <main
   id="main"
-  class="m-auto mx-auto flex h-full w-full max-w-3xl flex-col md:max-w-full md:px-4 lg:max-w-4xl">
+  class="app-shell m-auto mx-auto flex h-full w-full flex-col px-6 pb-12 pt-1 md:px-4">
   {#if $isLoading}
-    <div class="flex h-[100vh] w-full items-center justify-center">
+    <div class="flex h-[100dvh] w-full items-center justify-center">
       <Loading></Loading>
     </div>
   {:else}
