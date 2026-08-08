@@ -12,7 +12,6 @@
   "scripts": {
     "build:client": "cd client && npm run build",
     "build:server": "cd server && npm run build",
-    "dev": "concurrently --names server,client \"cd server && npm run dev\" \"cd client && npm run dev\"",
     "build": "yarn build:client && yarn build:server",
     "build:web": "yarn build",
     "desktop:dev": "yarn build:web && cd desktop && npm run dev",
@@ -45,7 +44,6 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "8",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5"
